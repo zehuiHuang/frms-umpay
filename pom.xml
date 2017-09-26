@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+   <groupId>cn.com.umpay</groupId>
+  <version>4.0.0-SNAPSHOT</version>
+  <artifactId>frms-pre-interface-spring-boot</artifactId>
+
+    <!-- Inherit defaults from Spring Boot -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.2.5.RELEASE</version>
+    </parent>
+
+    <!-- Add typical dependencies for a web application -->
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+<!--             <exclusions>
+      <exclusion>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-logging</artifactId>
+      </exclusion>
+   </exclusions> -->
+        </dependency>
+
+
+
+ <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>fastjson</artifactId>
+      <version>1.2.6</version>
+    </dependency>
+    
+    <dependency>
+    <groupId>org.drools</groupId>
+    <artifactId>drools-compiler</artifactId>
+    <version>5.6.0.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>cn.com.bsfit</groupId>
+      <artifactId>frms-pre-interface</artifactId>
+      <version>2.0.2</version>
+      <exclusions>    
+           <exclusion>        
+                <groupId>org.slf4j</groupId>            
+                <artifactId>slf4j-log4j12</artifactId>    
+           </exclusion>
+           <exclusion>        
+                <groupId>redis.clients</groupId>            
+                <artifactId>jedis</artifactId>    
+           </exclusion>        
+     </exclusions> 
+    </dependency>
+    <dependency>
+      <groupId>cn.com.bsfit</groupId>
+      <artifactId>frms-base</artifactId>
+      <version>2.1.4.beta</version>
+    </dependency>
+    <dependency>
+      <groupId>redis.clients</groupId>
+      <artifactId>jedis</artifactId>
+      <version>2.9.0</version>
+    </dependency>
+    
+    
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-client</artifactId>
+      <version>3.0.8.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-spring</artifactId>
+      <version>3.0.8.Final</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>resteasy-jettison-provider</artifactId>
+          <groupId>org.jboss.resteasy</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>jsr250-api</artifactId>
+          <groupId>javax.annotation</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>jaxrs-api</artifactId>
+          <groupId>org.jboss.resteasy</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+    <groupId>org.jgroups</groupId>
+    <artifactId>jgroups</artifactId>
+    <version>3.4.3.Final</version>
+</dependency>
+
+<!-- <dependency> 
+ <groupId>org.springframework.boot</groupId>
+ <artifactId>spring-boot-starter-log4j</artifactId>
+</dependency> -->
+<dependency>
+        <groupId>org.codehaus.janino</groupId>
+        <artifactId>janino</artifactId>
+        <version>3.0.7</version>
+    </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>spring-snapshots</id>
+            <url>http://repo.spring.io/libs-snapshot</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-snapshots</id>
+            <url>http://repo.spring.io/libs-snapshot</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>${spring.boot.version}</version>
+        <configuration>
+          <mainClass>cn.com.umpay.PreApp</mainClass>
+          <layout>ZIP</layout>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>springloaded</artifactId>
+            <version>1.2.3.RELEASE</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+        </plugins>
+    </build>
+    <properties>
+    <mybatis.version>3.3.0</mybatis.version>
+    <poi.version>3.11</poi.version>
+    <drools.version>5.6.0.bs</drools.version>
+    <mybatis.spring.version>1.2.3</mybatis.spring.version>
+    <spring.boot.version>1.2.5.RELEASE</spring.boot.version>
+    <janino.version>2.7.8</janino.version>
+    <fastjson.version>1.2.6</fastjson.version>
+    <tomcat.version>7.0.62</tomcat.version>
+  </properties>
+</project>
