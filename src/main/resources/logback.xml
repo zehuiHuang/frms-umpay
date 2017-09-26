@@ -1,0 +1,156 @@
+<configuration>
+    <!-- 开启JMX管理日志 -->
+	<jmxConfigurator />
+	<!-- 输出到控制台 -->
+	<appender name="STDOUT"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<!-- 输出格式 -->
+			<pattern>
+				%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<!-- error级别单独记录 -->
+	<appender name="errorAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">  
+		<file>logs/frms-pre-interface-error-today.log</file>
+		<!-- 以day为单位自动回滚 -->  
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">  
+			<fileNamePattern>logs/frms-pre-interface-error/frms-pre-interface-error-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern> 
+			<maxHistory>30</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">  
+		    	<!-- or whenever the file size reaches 100MB -->  
+		        <maxFileSize>100MB</maxFileSize>  
+		    </timeBasedFileNamingAndTriggeringPolicy>  
+		</rollingPolicy>  
+		<encoder>  
+			<pattern>%d{HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>  
+		</encoder>
+		<!-- error级别过滤器 -->
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>  
+			<onMatch>ACCEPT</onMatch>  
+			<onMismatch>DENY</onMismatch>
+		</filter>  
+	</appender> 
+	
+	<!-- warn级别单独记录 -->
+	<appender name="warnAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">  
+		<file>logs/frms-pre-interface-warn-today.log</file>
+		<!-- 以day为单位自动回滚 -->  
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">  
+			<fileNamePattern>logs/frms-pre-interface-warn/frms-pre-interface-warn-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>  
+			<maxHistory>30</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">  
+		    	<!-- or whenever the file size reaches 100MB -->  
+		        <maxFileSize>100MB</maxFileSize>  
+		    </timeBasedFileNamingAndTriggeringPolicy> 
+		</rollingPolicy>  
+		<encoder>  
+			<pattern>%d{HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>  
+		</encoder>
+		<!-- warn级别过滤器 -->
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>WARN</level>  
+			<onMatch>ACCEPT</onMatch>  
+			<onMismatch>DENY</onMismatch>
+		</filter>  
+	</appender> 
+	
+	<appender name="infoAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">  
+		<file>logs/frms-pre-interface-info-today.log</file>  
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">  
+			<fileNamePattern>logs/frms-pre-interface-info/processor-info-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>  
+			<maxHistory>30</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">  
+		    	<!-- or whenever the file size reaches 100MB -->  
+		        <maxFileSize>100MB</maxFileSize>  
+		    </timeBasedFileNamingAndTriggeringPolicy> 
+		</rollingPolicy>  
+		<encoder>  
+			<pattern>%d{HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>  
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>  
+			<onMatch>ACCEPT</onMatch>  
+			<onMismatch>DENY</onMismatch>
+		</filter>  
+	</appender>
+	<appender name="MpspLog" class="ch.qos.logback.core.rolling.RollingFileAppender">  
+		<file>logs/mpsp-interface.log</file>  
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">  
+			<fileNamePattern>logs/mpsp-interface-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>  
+			<maxHistory>30</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">  
+		    	<!-- or whenever the file size reaches 100MB -->  
+		        <maxFileSize>100MB</maxFileSize>  
+		    </timeBasedFileNamingAndTriggeringPolicy> 
+		</rollingPolicy>  
+		<encoder>  
+			<pattern>%d{yyyyMMddHHmmssSSS}-%m%n</pattern>  
+		</encoder>
+		<filter class="ch.qos.logback.core.filter.EvaluatorFilter">           
+      <evaluator> <!-- 默认为 ch.qos.logback.classic.boolex.JaninoEventEvaluator -->     
+        <expression>return message.contains("total");</expression>     
+      </evaluator>     
+      <OnMatch>ACCEPT </OnMatch>    
+      <OnMismatch>DENY</OnMismatch>    
+       </filter> 
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>  
+			<onMatch>ACCEPT</onMatch>  
+			<onMismatch>DENY</onMismatch>
+		</filter>  
+	</appender>
+	
+	<appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">  
+		<file>logs/frms-pre-interface.log </file>  
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">  
+			<fileNamePattern>logs/frms-pre-interface-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>  
+			<maxHistory>30</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">  
+		    	<!-- or whenever the file size reaches 100MB -->  
+		        <maxFileSize>100MB</maxFileSize>  
+		    </timeBasedFileNamingAndTriggeringPolicy> 
+		</rollingPolicy>  
+		<encoder>  
+			<pattern>%d{yyyyMMdd-HHmmss.SSS} %p [%c{1}] - %m%n</pattern>  
+		</encoder>  
+<!--        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator> 
+                <expression>return message.contains("total");</expression>
+            </evaluator>
+            <OnMismatch>NEUTRAL</OnMismatch>
+            <OnMatch>DENY</OnMatch>
+        </filter> -->
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>  
+			<onMatch>ACCEPT</onMatch>  
+			<onMismatch>DENY</onMismatch>
+		</filter>  
+	</appender>
+	
+<!-- 	<logger name="cn.com.umpay.frms.preprocessor.res" level="INFO"/> -->
+	<logger name="cn.com.umpay.frms.preprocessor.res" additivity="true">  
+        <appender-ref ref="MpspLog" />  
+    </logger>
+    <logger name="com.umpay.loader.cal" additivity="true">  
+        <appender-ref ref="infoAppender" />
+        <appender-ref ref="warnAppender" />  
+        <appender-ref ref="errorAppender" />
+        <appender-ref ref="file" />    
+    </logger>
+<!--     <logger name="com.umpay.loader.cal" additivity="true">  
+        <appender-ref ref="infoAppender" />  
+    </logger>   -->  
+	<!-- 根，所有logger的祖先 -->
+	<root level="INFO">
+	   <appender-ref ref="file" />
+	   <appender-ref ref="MpspLog" />
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="errorAppender" />
+		<appender-ref ref="warnAppender" />
+		<appender-ref ref="infoAppender" />
+	</root>
+</configuration>

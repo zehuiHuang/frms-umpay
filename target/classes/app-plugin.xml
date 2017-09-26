@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context" xmlns:util="http://www.springframework.org/schema/util"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+  <bean id="redisStorer" class="cn.com.umpay.frms.preprocessor.core.agent.IncrRedisStorer">
+    <property name="pool" ref="jedisSentinelPool" />
+  </bean>
+  <bean name="abstractCalcTask" class="com.umpay.loader.cal.AbstractUmpayRiskPayOrderCalculationTask" abstract="true">
+    <property name="jedisPool" ref="jedisSentinelPool" />
+    <property name="calcLog" value="${calc.detail.log}" />
+    <property name="calcTimeLog" value="${calc.time.log}" />
+    <property name="jedisCluster" ref="jedisCluster" />
+    <property name="statusLine"  value="${redis.cluster.status}" />
+  </bean>
+  
+  <bean name="merAccountTask" class="com.umpay.loader.cal.impl.MerAccountTask" parent="abstractCalcTask"/>
+  <bean name="merCardTask" class="com.umpay.loader.cal.impl.MerCardTask" parent="abstractCalcTask"/>
+  <bean name="merIdTask" class="com.umpay.loader.cal.impl.MerIdTask" parent="abstractCalcTask"/>
+  <bean name="merMobileTask" class="com.umpay.loader.cal.impl.MerMobileTask" parent="abstractCalcTask"/>
+  <bean name="merProductTask" class="com.umpay.loader.cal.impl.MerProductTask" parent="abstractCalcTask"/>
+  <bean name="merProductAccountTask" class="com.umpay.loader.cal.impl.MerProductAccountTask" parent="abstractCalcTask"/>
+  <bean name="merProductCardTask" class="com.umpay.loader.cal.impl.MerProductCardTask" parent="abstractCalcTask"/>
+  <bean name="merProductIdTask" class="com.umpay.loader.cal.impl.MerProductIdTask" parent="abstractCalcTask"/>
+  <bean name="merProductUserTask" class="com.umpay.loader.cal.impl.MerProductUserTask" parent="abstractCalcTask"/>
+  <bean name="merTask" class="com.umpay.loader.cal.impl.MerTask" parent="abstractCalcTask"/>
+  <bean name="merUserTask" class="com.umpay.loader.cal.impl.MerUserTask" parent="abstractCalcTask"/>
+  <bean name="mobileMerProductTask" class="com.umpay.loader.cal.impl.MobileMerProductTask" parent="abstractCalcTask"/>
+  <bean name="productTask" class="com.umpay.loader.cal.impl.ProductTask" parent="abstractCalcTask"/>
+  <bean name="bankProductTask" class="com.umpay.loader.cal.impl.BankProductTask" parent="abstractCalcTask"/>
+  <bean name="cardTask" class="com.umpay.loader.cal.impl.CardTask" parent="abstractCalcTask"/>
+  <bean name="ipMerProductTask" class="com.umpay.loader.cal.impl.IpMerProductTask" parent="abstractCalcTask"/>
+  <bean name="mobileareaTask" class="com.umpay.loader.cal.impl.MobileareaTask" parent="abstractCalcTask"/>
+  <bean name="mobileTask" class="com.umpay.loader.cal.impl.MobileTask" parent="abstractCalcTask"/>
+  <bean name="umpipareaTask" class="com.umpay.loader.cal.impl.UmpipareaTask" parent="abstractCalcTask"/>
+  <bean name="termTask" class="com.umpay.loader.cal.impl.TermTask"  parent="abstractCalcTask"/>
+  <bean name="termCardTask" class="com.umpay.loader.cal.impl.TermCardTask"  parent="abstractCalcTask"/>
+  <bean name="binTermTask" class="com.umpay.loader.cal.impl.BinTermTask" parent="abstractCalcTask"/>
+  <bean name="idCardTask" class="com.umpay.loader.cal.impl.IDCardTask" parent="abstractCalcTask"/>
+  <bean name="merMobileSegmentTask" class="com.umpay.loader.cal.impl.MerMobileSegmentTask" parent="abstractCalcTask"/>
+  <!-- <bean name="merCardSegmentTask" class="com.umpay.loader.cal.impl.MerCardSegmentTask" parent="abstractCalcTask"/> -->
+  <bean name="merTermTask" class="com.umpay.loader.cal.impl.MerTermTask" parent="abstractCalcTask"/>
+  <bean name="mobileNewUserTask" class="com.umpay.loader.cal.impl.MobileNewUserTask" parent="abstractCalcTask"/>
+    
+  <bean name="calculatorHelper" class="com.umpay.loader.cal.RiskPayOrderCalculaterHelper">
+    <property name="calculationTasks">
+      <list>
+        <!-- <ref bean="merAccountTask" /> -->
+        <!-- <ref bean="merCardTask" /> -->
+        <!-- <ref bean="merIdTask" /> -->
+        <!-- <ref bean="merMobileTask" /> -->
+        <!-- <ref bean="merProductTask" />  -->
+        <ref bean="merProductAccountTask" />
+        <ref bean="merProductCardTask" />
+        <ref bean="merProductIdTask" />
+        <ref bean="merProductUserTask" />
+        <ref bean="merTask" />
+        <!-- <ref bean="merUserTask" /> -->
+        <ref bean="mobileMerProductTask" />
+        <!-- <ref bean="productTask" /> -->
+        <!-- <ref bean="bankProductTask" /> -->
+        <ref bean="cardTask" />
+        <ref bean="ipMerProductTask" />
+        <ref bean="mobileTask" />
+        <ref bean="umpipareaTask" />
+        <ref bean="mobileareaTask" />
+        <ref bean="termTask" />
+        <ref bean="termCardTask" />
+        <ref bean="binTermTask" />
+        <ref bean="idCardTask" />
+        <ref bean="merMobileSegmentTask" /> 
+            <!-- <ref bean="merCardSegmentTask" /> -->
+            <ref bean="merTermTask" />
+            <ref bean="mobileNewUserTask" />
+      </list>
+    </property>
+  </bean>
+  
+  <!-- redis -->
+  <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig" >
+    <property name="maxTotal" value="50"/>
+    <property name="maxIdle" value="50"/>
+    <property name="minIdle" value="50"/>
+  </bean>
+  <bean id="jedisSentinelPool" class="redis.clients.jedis.JedisSentinelPool">
+    <constructor-arg index="0" value="${redis.sentinel.name}" />
+    <constructor-arg index="1">
+      <set>
+        <value>${redis.sentinel.url.1}</value>
+        <value>${redis.sentinel.url.2}</value>
+        <value>${redis.sentinel.url.3}</value>
+        <value>${redis.sentinel.url.4}</value>
+      </set>
+    </constructor-arg>
+    <constructor-arg index="2" ref="jedisPoolConfig" />
+  </bean>
+  
+  
+  <!-- redis-cluster -->
+  <bean id="jedisPoolConfig2" class="redis.clients.jedis.JedisPoolConfig">  
+       <!-- 最大连接数 -->  
+       <property name="maxTotal" value="30" />  
+       <!-- 最大空闲连接数 -->  
+       <property name="maxIdle" value="10" />  
+       <!-- 每次释放连接的最大数目 -->  
+       <property name="numTestsPerEvictionRun" value="1024" />  
+       <!-- 释放连接的扫描间隔（毫秒） -->  
+       <property name="timeBetweenEvictionRunsMillis" value="30000" />  
+       <!-- 连接最小空闲时间 -->  
+       <property name="minEvictableIdleTimeMillis" value="1800000" />  
+       <!-- 连接空闲多久后释放, 当空闲时间>该值且空闲连接>最大空闲连接数时直接释放 -->  
+       <property name="softMinEvictableIdleTimeMillis" value="10000" />  
+       <!-- 获取连接时的最大等待毫秒数,小于零:阻塞不确定的时间,默认-1 -->  
+       <property name="maxWaitMillis" value="3000" />  
+       <!-- 在获取连接的时候检查有效性, 默认false -->  
+       <property name="testOnBorrow" value="true" />  
+       <!-- 在空闲时检查有效性, 默认false -->  
+       <property name="testWhileIdle" value="true" />  
+       <!-- 连接耗尽时是否阻塞, false报异常,ture阻塞直到超时, 默认true -->  
+       <property name="blockWhenExhausted" value="false" />  
+    </bean> 
+  <bean id="jedisCluster" class="redis.clients.jedis.JedisCluster">  
+       <constructor-arg name="nodes">  
+           <set>  
+              <bean class="redis.clients.jedis.HostAndPort">  
+                  <constructor-arg name="host" value="${host1}"></constructor-arg>  
+                  <constructor-arg name="port" value="${port1}"></constructor-arg>  
+              </bean>  
+              <bean class="redis.clients.jedis.HostAndPort">  
+                  <constructor-arg name="host" value="${host1}"></constructor-arg>  
+                  <constructor-arg name="port" value="${port2}"></constructor-arg>  
+              </bean>  
+              <bean class="redis.clients.jedis.HostAndPort">  
+                  <constructor-arg name="host" value='${host2}'></constructor-arg>  
+                  <constructor-arg name="port" value="${port1}"></constructor-arg>  
+              </bean>  
+              <bean class="redis.clients.jedis.HostAndPort">  
+                  <constructor-arg name="host" value='${host2}'></constructor-arg>  
+                  <constructor-arg name="port" value="${port2}"></constructor-arg>  
+              </bean>  
+              <bean class="redis.clients.jedis.HostAndPort">  
+                  <constructor-arg name="host" value="${host3}"></constructor-arg>  
+                  <constructor-arg name="port" value="${port1}"></constructor-arg>  
+              </bean>  
+              <bean class="redis.clients.jedis.HostAndPort">  
+                  <constructor-arg name="host" value="${host3}"></constructor-arg>  
+                  <constructor-arg name="port" value="${port2}"></constructor-arg>  
+              </bean>  
+           </set>  
+       </constructor-arg>  
+       <constructor-arg name="poolConfig" ref="jedisPoolConfig2"></constructor-arg>  
+    </bean>  
+</beans>
